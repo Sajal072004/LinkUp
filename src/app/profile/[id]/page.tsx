@@ -3,6 +3,7 @@ import LeftMenu from '@/components/LeftMenu';
 import RightMenu from '@/components/RightMenu';
 
 import Feed from '@/components/Feed';
+import Image from 'next/image';
 
 const ProfilePage = () => {
   return (
@@ -13,6 +14,30 @@ const ProfilePage = () => {
 
       <div className="w-full lg:w-[70%] xl:w-[50%]">
         <div className="flex flex-col gap-6">
+          <div className='flex flex-col items-center justify-center'>
+            <div className='w-full h-64 relative'>
+              <Image src='https://images.pexels.com/photos/27856556/pexels-photo-27856556/free-photo-of-the-milky-way-over-a-lake-with-mountains-in-the-background.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load' alt='' fill className='object-cover rounded-md' />
+              <Image src='https://images.pexels.com/photos/16191750/pexels-photo-16191750/free-photo-of-hand-holding-open-book-with-autumn-leaves.jpeg?auto=compress&cs=tinysrgb&w=600&lazy=load' alt='' height={128} width={128} className='object-cover w-32 h-32 rounded-full absolute left-0 right-0 m-auto -bottom-16 ring-4 ring-white' />
+
+            </div>
+            <h1 className='mt-20 mb-4 text-2xl font-medium'>Sajal Namdeo</h1>
+            <div className='flex items-center justify-center gap-12 mb-4'>
+                <div className='flex flex-col items-center'>
+                  <span className='font-medium'>123</span>
+                  <span className='text-sm'>Posts</span>
+                </div>
+
+                <div className='flex flex-col items-center'>
+                  <span className='font-medium'>1.2k</span>
+                  <span className='text-sm'>Followers</span>
+                </div>
+
+                <div className='flex flex-col items-center'>
+                  <span className='font-medium'>1.5k</span>
+                  <span className='text-sm'>Following</span>
+                </div>
+            </div>
+          </div>
           <Feed />
         </div>
       </div>

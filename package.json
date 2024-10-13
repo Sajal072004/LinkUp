@@ -12,10 +12,12 @@
     "@clerk/nextjs": "^5.7.2",
     "@prisma/client": "^5.20.0",
     "babel-plugin-react-compiler": "^0.0.0-experimental-938cd9a-20240601",
+    "choco": "^0.2.1",
     "next": "15.0.0-rc.0",
     "prisma": "^5.20.0",
     "react": "19.0.0-rc-f994737d14-20240522",
-    "react-dom": "19.0.0-rc-f994737d14-20240522"
+    "react-dom": "19.0.0-rc-f994737d14-20240522",
+    "svix": "^1.37.0"
   },
   "devDependencies": {
     "@types/node": "^20",

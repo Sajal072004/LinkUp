@@ -34,7 +34,7 @@ model User {
   followRequestsSent     FollowRequest[] @relation("FollowRequestsSent")
   followRequestsReceived FollowRequest[] @relation("FollowRequestsReceived")
 
-  blocks     Block[] @relation("BlocksSent")
+  blocks    Block[] @relation("BlocksSent")
   blockedBy Block[] @relation("BlocksReceived")
 
   stories Story[]
@@ -43,6 +43,7 @@ model User {
 model Post {
   id        Int       @id @default(autoincrement())
   desc      String
+  img       String?
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -109,11 +110,8 @@ model Block {
 model Story {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
-  expiresAt DateTime 
-  user   User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String @unique
-  img String
-  
-
-  
+  expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @unique
+  img       String
 }

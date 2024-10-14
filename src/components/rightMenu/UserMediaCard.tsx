@@ -18,7 +18,8 @@ const UserMediaCard = async ({ user }: { user: User }) => {
     orderBy:{
       createdAt:"desc"
     },
-  })
+  });
+  
 
 
   return (

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useOptimistic, useState } from "react";
 import Image from "next/image";
@@ -10,8 +10,12 @@ type RequestWithUser = FollowRequest & { sender: User };
 const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
   const [requestState, setRequestState] = useState(requests);
 
+  const [optimisticRequests, removeOptimisticRequests] = useOptimistic(
+    requestState,
+    (state, value: number) => state.filter((req) => req.id !== value)
+  );
+
   const accept = async (requestId: number, userId: string) => {
-    removeOptimisticRequests(requestId);
     try {
       await acceptFollowRequest(userId);
       setRequestState((prev) => prev.filter((req) => req.id !== requestId));
@@ -21,7 +25,6 @@ const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
   };
 
   const decline = async (requestId: number, userId: string) => {
-    removeOptimisticRequests(requestId);
     try {
       await declineFollowRequest(userId);
       setRequestState((prev) => prev.filter((req) => req.id !== requestId));
@@ -30,14 +33,9 @@ const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
     }
   };
 
-  const [optimisticRequests, removeOptimisticRequests] = useOptimistic(
-    requestState,
-    (state, value: number) => state.filter((req) => req.id !== value)
-  );
-
   return (
     <div>
-      {requests.map((request) => (
+      {optimisticRequests.map((request) => (
         <div className="flex items-center justify-between" key={request.id}>
           <div className="flex items-center gap-4">
             <Image
@@ -49,13 +47,13 @@ const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
             />
             <span className="font-semibold">
               {request.sender.name && request.sender.surname
-                ? request.sender.name + " " + request.sender.surname
+                ? `${request.sender.name} ${request.sender.surname}`
                 : request.sender.username}
             </span>
           </div>
           <div className="flex gap-3 justify-end">
-            <form action={() => accept(request.id, request.sender.id)}>
-              <button>
+            <form onSubmit={(e) => { e.preventDefault(); accept(request.id, request.sender.id); }}>
+              <button type="submit">
                 <Image
                   src="/accept.png"
                   alt=""
@@ -66,8 +64,8 @@ const FriendRequestList = ({ requests }: { requests: RequestWithUser[] }) => {
               </button>
             </form>
 
-            <form action={() => decline(request.id, request.sender.id)}>
-              <button>
+            <form onSubmit={(e) => { e.preventDefault(); decline(request.id, request.sender.id); }}>
+              <button type="submit">
                 <Image
                   src="/reject.png"
                   alt=""

@@ -7,6 +7,7 @@ const ProfileCard = async () => {
 
   const {userId} = auth();
   if(!userId) return null;
+  console.log("this is left component" , userId);
 
   const user = await prisma.user.findFirst({
     

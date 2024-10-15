@@ -93,7 +93,7 @@ const StoryList = ({ stories,userId }: { stories: StoryWithUser[], userId:string
       </CldUploadWidget>
       {/* story */}
       {optimisticStories.map((story) => (
-        <div className="flex flex-col items-center gap-2 cursor-pointer">
+        <div className="flex flex-col items-center gap-2 cursor-pointer" key={story.id}>
           <Image
             src={story.user.avatar || "/noAvatar.png"}
             alt=""

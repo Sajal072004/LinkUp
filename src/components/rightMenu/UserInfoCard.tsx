@@ -112,11 +112,12 @@ const UserInfoCard = async ({ user }: { user: User }) => {
             </Link>
           </div>}
 
-          <div className="flex gap-1 items-center">
+          
+        </div>
+        <div className="flex gap-1 items-center">
             <Image src="/date.png" alt="" width={16} height={16} />
             <span>Joined {formattedDate}</span>
           </div>
-        </div>
 
         {currentUserId &&  currentUserId != user.id  && <UserInfoCardInteraction userId={user.id} currentUserId= {currentUserId}
         isUserBlocked={isUserBlocked}

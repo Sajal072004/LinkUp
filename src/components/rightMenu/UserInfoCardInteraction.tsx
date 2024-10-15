@@ -1,17 +1,14 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { switchFollow } from "@/lib/actions";
+import { switchBlock, switchFollow } from "@/lib/actions";
+import { useOptimistic, useState } from "react";
 
-import {useOptimistic} from 'react'
 const UserInfoCardInteraction = ({
-  currentUserId,
   userId,
   isUserBlocked,
   isFollowing,
   isFollowingSent,
 }: {
-  currentUserId: string | null;
   userId: string;
   isUserBlocked: boolean;
   isFollowing: boolean;
@@ -23,85 +20,58 @@ const UserInfoCardInteraction = ({
     followingRequestSent: isFollowingSent,
   });
 
-  useEffect(()=>  {
-     switchOptimisticFollow("follow");
-      setUserState((prev) => ({
-        ...prev,
-        following: prev.following && false,
-        followingRequestSent: !prev.following && !prev.followingRequestSent ? true : false,
-      }));
-
-      switchOptimisticFollow("block");
-    try {
-      switchFollow(userId);
-      setUserState((prev) => ({
-        ...prev,
-        blocked: !prev.blocked,
-      }))
-      
-    } catch (error) {
-      console.log(error);
-    }
-      
-  },[])
-
   const follow = async () => {
-    switchOptimisticFollow("follow");
+    switchOptimisticState("follow");
     try {
       await switchFollow(userId);
       setUserState((prev) => ({
         ...prev,
         following: prev.following && false,
-        followingRequestSent: !prev.following && !prev.followingRequestSent ? true : false,
+        followingRequestSent:
+          !prev.following && !prev.followingRequestSent ? true : false,
       }));
-    } 
-    catch (error) {
-      console.log("error posting the data",error);
-    }
+    } catch (err) {}
   };
 
   const block = async () => {
-    switchOptimisticFollow("block");
+    switchOptimisticState("block");
     try {
-      await switchFollow(userId);
+      await switchBlock(userId);
       setUserState((prev) => ({
         ...prev,
         blocked: !prev.blocked,
-      }))
-      
-    } catch (error) {
-      console.log(error);
-    }
-  }
+      }));
+    } catch (err) {}
+  };
 
-  const [optimisticFollow , switchOptimisticFollow] = useOptimistic(
+  const [optimisticState, switchOptimisticState] = useOptimistic(
     userState,
-    (state,value:"follow" | "block")=> value === "follow" ? ({
-      ...state,
-      following:state.following && false,
-      followingRequestSent: !state.following && !state.followingRequestSent ? true : false
-    }) : {
-      ...state, blocked:!state.blocked
-    }
-
-  )
-
+    (state, value: "follow" | "block") =>
+      value === "follow"
+        ? {
+            ...state,
+            following: state.following && false,
+            followingRequestSent:
+              !state.following && !state.followingRequestSent ? true : false,
+          }
+        : { ...state, blocked: !state.blocked }
+  );
   return (
     <>
       <form action={follow}>
-        <button type='submit' className="w-full bg-blue-500 text-white text-sm rounded-md p-2">
-          {optimisticFollow.following
+        <button className="w-full bg-blue-500 text-white text-sm rounded-md p-2">
+          {optimisticState.following
             ? "Following"
-            : optimisticFollow.followingRequestSent
+            : optimisticState.followingRequestSent
             ? "Friend Request Sent"
             : "Follow"}
         </button>
       </form>
-      <form action={block} className="self-end">
-        <button type="submit">
-        <span className="text-red-400 text-xs cursor-pointer">
-          {optimisticFollow.blocked ? "Unblock User" : "Block User"}
-        </span>
+      <form action={block} className="self-end ">
+        <button>
+          <span className="text-red-400 text-xs cursor-pointer">
+            {optimisticState.blocked ? "Unblock User" : "Block User"}
+          </span>
         </button>
       </form>
     </>

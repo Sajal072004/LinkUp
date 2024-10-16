@@ -7,6 +7,7 @@ import Feed from "@/components/feed/Feed";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
+import UserInfoCard from "@/components/rightMenu/UserInfoCard";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params.username;
@@ -51,6 +52,9 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
       </div>
 
       <div className="w-full lg:w-[70%] xl:w-[50%]">
+        <div className=" md:hidden lg:hidden xl:hidden mb-12">
+          <UserInfoCard user={user}/>
+        </div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center justify-center">
             <div className="w-full h-64 relative">

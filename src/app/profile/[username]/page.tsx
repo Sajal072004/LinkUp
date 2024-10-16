@@ -8,6 +8,7 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import UserInfoCard from "@/components/rightMenu/UserInfoCard";
+import FriendRequests from "@/components/rightMenu/FriendRequests";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params.username;
@@ -54,6 +55,9 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
       <div className="w-full lg:w-[70%] xl:w-[50%]">
         <div className=" md:hidden lg:hidden xl:hidden mb-12">
           <UserInfoCard user={user}/>
+        </div>
+        <div className=" md:hidden lg:hidden xl:hidden mb-12">
+          <FriendRequests/>
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center justify-center">

@@ -16,8 +16,8 @@ const PostInfo = ({postId} : {postId:number}) => {
       {
         open && 
         <div className='absolute top-4 right-0 bg-white p-4 rounded-lg flex flex-col gap-2 text-xs shadow-lg z-30 w-32'>
-          <span className='cursor-pointer'>View </span>
-          <span className='cursor-pointer'>Repost </span>
+          {/* <span className='cursor-pointer'>View </span>
+          <span className='cursor-pointer'>Repost </span> */}
          { <form action={deletePostWithId}>
             <button className='text-red-500'>Delete</button>
           </form>}

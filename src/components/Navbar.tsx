@@ -9,7 +9,11 @@ import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react';
 
 
 
-const Navbar = () => {
+
+const Navbar = async() => {
+
+  
+
   return (
     <div className='h-24 flex items-center justify-between'>
       {/* left */}
@@ -81,8 +85,11 @@ const Navbar = () => {
         </SignedOut>
 
         </div>
-
+        <div className='md:hidden'>
         <MobileMenu />
+        </div>
+
+
 
       </div>
 

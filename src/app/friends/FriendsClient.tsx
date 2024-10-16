@@ -15,16 +15,14 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
 
     try {
       // You can handle the search and adding friend logic via an API route or another method
-      const response = await fetch(`/api/findUser?username=${newFriendUsername}`);
-      const user = await response.json();
+      
 
-      if (user && user.username) {
+      
         // Redirect to the friend's profile if found
-        window.location.href = `/profile/${user.username}`;
-      } else {
-        setSearchError("User not found");
-      }
-    } catch (error) {
+        window.location.href = `/profile/${newFriendUsername}`;
+      } 
+      
+     catch (error) {
       setSearchError("Error searching for the user");
     }
   };
@@ -35,7 +33,7 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
       <div className="flex mb-4">
         <input
           type="text"
-          placeholder="Enter friend's username"
+          placeholder="Enter a username"
           value={newFriendUsername}
           onChange={(e) => setNewFriendUsername(e.target.value)}
           className="border rounded p-2 flex-grow"
@@ -44,7 +42,7 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
           onClick={handleAddFriend}
           className="bg-blue-500 text-white rounded px-4 ml-2"
         >
-          Add Friend
+          Find User
         </button>
       </div>
 
@@ -55,7 +53,8 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
       <h2 className="text-xl font-semibold mb-4">Followers</h2>
       <ul>
         {followers.map((follower) => (
-          <li key={follower.id} className="flex items-center mb-2">
+          <li key={follower.id} className="flex flex-col my-4
+          ">
             <Link href={`/profile/${follower.username}`}>
               <div className="flex items-center cursor-pointer">
                 <img

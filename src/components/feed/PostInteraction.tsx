@@ -74,7 +74,7 @@ const PostInteraction = ({postId, likes, commentNumber} : {postId:number , likes
           </div>
         </div>
 
-        <div className="">
+        {/* <div className="">
           <div className="flex items-center gap-4 bg-slate-100 p-2 rounded-xl">
             <Image
               src="/share.png"
@@ -88,7 +88,7 @@ const PostInteraction = ({postId, likes, commentNumber} : {postId:number , likes
               123<span className="hidden md:inline"> Shares</span>
             </span>
           </div>
-        </div>
+        </div> */}
       </div>
     
   )

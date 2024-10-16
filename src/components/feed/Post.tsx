@@ -5,6 +5,7 @@ import {Post as PostType, User } from "@prisma/client";
 import PostInteraction from "./PostInteraction";
 import PostInfo from "./PostInfo";
 import { auth } from "@clerk/nextjs/server";
+import ImagePreview from "./ImagePreview";
 
 type FeedPostType = PostType & {user:User} & {likes: [{userId:string}]} & {_count: {comments:number}}
 
@@ -29,13 +30,14 @@ const Post = ({post}:{post:FeedPostType}) => {
 
       {/* desc */}
       <div className="flex flex-col gap-4">
-      {post.img &&  <div className="w-full min-h-96 relative">
-          <Image
+      {post.img &&  <div className="w-full min-h-96 relative bg-gray-200">
+          {/* <Image
             src={post.img}
             fill
             alt=""
-            className="object-cover rounded-md"
-          ></Image>
+            className="object-contain rounded-md"
+          ></Image> */}
+          <ImagePreview src={post.img}/>
         </div>}
         <p className="px-1">
           {post.desc}

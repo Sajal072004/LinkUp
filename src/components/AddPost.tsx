@@ -21,7 +21,7 @@ const AddPost = () => {
       <Image
         src={user?.imageUrl || "/noAvatar.png"}
         alt=""
-        className="w-12 h-12 object-cover rounded-full"
+        className="w-12 h-12 object-fit rounded-full"
         width={48}
         height={48}
       ></Image>

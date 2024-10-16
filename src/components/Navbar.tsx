@@ -31,15 +31,12 @@ const Navbar = async() => {
             <span>Homepage</span>
           </Link>
 
-          <Link href='/' className='flex gap-2 items-center'>
+          <Link href='/friends' className='flex gap-2 items-center'>
             <Image src='/friends.png' alt='' width={16} height={16} className='w-4 h-4' />
             <span>Friends</span>
           </Link>
 
-          <Link href='/' className='flex gap-2 items-center'>
-            <Image src='/stories.png' alt='' width={16} height={16} className='w-4 h-4' />
-            <span>Stories</span>
-          </Link>
+        
 
         </div>
 

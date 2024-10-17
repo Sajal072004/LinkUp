@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { User } from "@prisma/client"; // Import the Prisma User model type
+import { useUser } from "@clerk/nextjs"; // Import the useUser hook
 
 // Define the props to include both followers and followings
 const FriendsClient = ({ followers, followings }: { followers: User[]; followings: User[] }) => {
+  const { user } = useUser(); // Get the current user
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [searchError, setSearchError] = useState<string | null>(null);
 
@@ -16,19 +18,36 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
     try {
       // You can handle the search and adding friend logic via an API route or another method
       
-
-      
-        // Redirect to the friend's profile if found
-        window.location.href = `/profile/${newFriendUsername}`;
-      } 
-      
-     catch (error) {
+      // Redirect to the friend's profile if found
+      window.location.href = `/profile/${newFriendUsername}`;
+    } catch (error) {
       setSearchError("Error searching for the user");
+    }
+  };
+
+  const copyLink = () => {
+    if (user) {
+      const link = `https://link-up-silk.vercel.app/profile/${user.username}`;
+      navigator.clipboard.writeText(link)
+        .then(() => alert("Profile link copied to clipboard!"))
+        .catch(() => alert("Failed to copy link"));
     }
   };
 
   return (
     <div>
+      {/* Share Profile Section */}
+      <div className="bg-gray-100 p-4 rounded-lg mb-6">
+        <h2 className="text-lg font-semibold mb-2">Invite Friends</h2>
+        <p className="text-gray-600 mb-4">Share your profile link with your friends!</p>
+        <button
+          onClick={copyLink}
+          className="bg-blue-500 text-white rounded px-4 py-2"
+        >
+          Copy Profile Link
+        </button>
+      </div>
+
       {/* Add Friend Input */}
       <div className="flex mb-4">
         <input
@@ -53,8 +72,7 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
       <h2 className="text-xl font-semibold mb-6">Followers</h2>
       <ul className="flex flex-col gap-6">
         {followers.map((follower) => (
-          <li key={follower.id}
-          >
+          <li key={follower.id}>
             <Link href={`/profile/${follower.username}`}>
               <div className="flex items-center cursor-pointer">
                 <img
@@ -73,7 +91,7 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
       <h2 className="text-xl font-semibold mt-6 mb-6">Following</h2>
       <ul className="flex flex-col gap-6">
         {followings.map((following) => (
-          <li key={following.id} >
+          <li key={following.id}>
             <Link href={`/profile/${following.username}`}>
               <div className="flex items-center cursor-pointer">
                 <img

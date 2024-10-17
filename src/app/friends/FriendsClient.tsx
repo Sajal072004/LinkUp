@@ -50,11 +50,11 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
       {searchError && <p className="text-red-500">{searchError}</p>}
 
       {/* Followers List */}
-      <h2 className="text-xl font-semibold mb-4">Followers</h2>
-      <ul>
+      <h2 className="text-xl font-semibold mb-6">Followers</h2>
+      <ul className="flex flex-col gap-6">
         {followers.map((follower) => (
-          <li key={follower.id} className="flex flex-col my-4
-          ">
+          <li key={follower.id}
+          >
             <Link href={`/profile/${follower.username}`}>
               <div className="flex items-center cursor-pointer">
                 <img
@@ -70,10 +70,10 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
       </ul>
 
       {/* Followings List */}
-      <h2 className="text-xl font-semibold mt-6 mb-4">Following</h2>
-      <ul>
+      <h2 className="text-xl font-semibold mt-6 mb-6">Following</h2>
+      <ul className="flex flex-col gap-6">
         {followings.map((following) => (
-          <li key={following.id} className="flex items-center mb-2">
+          <li key={following.id} >
             <Link href={`/profile/${following.username}`}>
               <div className="flex items-center cursor-pointer">
                 <img

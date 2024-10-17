@@ -30,7 +30,7 @@ const UpdateUser = ({ user }: { user: User }) => {
   useEffect(() => {
     if (open) {
       // Disable scroll
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = "auto";
     } else {
       // Enable scroll
       document.body.style.overflow = "auto";
@@ -95,7 +95,7 @@ const UpdateUser = ({ user }: { user: User }) => {
 
             <div className="flex flex-wrap justify-between gap-2 xl:gap-4">
               {/* First Name */}
-              <div className="flex flex-col w-full md:w-[45%] gap-2">
+              <div className="flex flex-col w-full md:w-[45%]">
                 <label className="text-xs text-gray-500">First Name</label>
                 <input
                   type="text"

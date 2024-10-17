@@ -64,14 +64,18 @@ const Navbar = async() => {
 
         <SignedIn>
           <div className='hidden md:block cursor-pointer'>
-            <Image src='/people.png' alt='' width={24} height={24} />
+            <Link href={'/friends'}>
+            <Image src='/people.png' alt='' width={24} height={24} /></Link>
+           
           </div>
           <div className='cursor-pointer'>
-            <Image src='/messages.png' alt='' width={20} height={20} />
+            <Link href={'/friends'}>
+            <Image src='/messages.png' alt='' width={20} height={20} /></Link>
+            
           </div>
-          <div className='cursor-pointer'>
+          {/* <div className='cursor-pointer'>
             <Image src='/notifications.png' alt='' width={20} height={20} />
-          </div>
+          </div> */}
          <UserButton/>
         </SignedIn>
         <SignedOut>

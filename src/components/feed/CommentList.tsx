@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { addComment, deleteComment } from "@/lib/actions"; // Import your functions
 import { useUser } from "@clerk/nextjs";
@@ -11,9 +11,11 @@ type CommentWithUser = Comment & { user: User };
 const CommentList = ({
   comments,
   postId,
+  postOwnerId, // Added postOwnerId prop
 }: {
   comments: CommentWithUser[];
   postId: number;
+  postOwnerId: string; // Include the post owner ID
 }) => {
   const { user } = useUser();
   const [commentState, setCommentState] = useState(comments);
@@ -24,6 +26,7 @@ const CommentList = ({
     e.preventDefault();
     if (!user || !desc) return;
 
+    // Optimistically add the comment
     addOptimisticComment({
       id: Math.random(),
       desc,
@@ -56,13 +59,15 @@ const CommentList = ({
     }
   };
 
-  const handleDeleteComment = async (commentId: number) => {
+  const handleDeleteComment = async (commentId: number, commentOwnerId: string) => {
     try {
       if (!user) return;
 
-      await deleteComment(commentId, user.id); // Call delete function
+      // Always pass the comment owner's user ID to the deleteComment function
+      await deleteComment(commentId, commentOwnerId);
 
-      setCommentState((prev) => prev.filter((comment) => comment.id !== commentId)); // Update UI
+      // Update UI
+      setCommentState((prev) => prev.filter((comment) => comment.id !== commentId)); 
     } catch (err) {
       // Handle delete error
       console.error("Error deleting comment:", err);
@@ -154,16 +159,15 @@ const CommentList = ({
                   </div>
                 </div>
                 {/* DELETE BUTTON */}
-                {user && comment.userId === user.id && (
+                {user && (comment.userId === user.id || postOwnerId === user.id) && (
                   <button
-                    onClick={() => handleDeleteComment(comment.id)}
+                    onClick={() => handleDeleteComment(comment.id, comment.userId)} // Pass comment owner's ID
                     className="text-red-500 hover:underline"
                   >
                     Delete
                   </button>
                 )}
                 {/* MORE ICON */}
-                
               </div>
             ))}
           </div>

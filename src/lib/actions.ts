@@ -367,3 +367,26 @@ export const deletePost = async ( postId:number) => {
     console.log(error)
   }
 }
+
+
+export const deleteComment = async (commentId: number, userId: string) => {
+  try {
+    // Ensure the comment belongs to the user trying to delete it
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      select: { userId: true },
+    });
+
+    if (!comment || comment.userId !== userId) {
+      throw new Error("You are not authorized to delete this comment.");
+    }
+
+    const deletedComment = await prisma.comment.delete({
+      where: { id: commentId },
+    });
+
+    return deletedComment;
+  } catch (error) {
+    throw new Error("Error deleting comment: " + error.message);
+  }
+};

@@ -387,6 +387,6 @@ export const deleteComment = async (commentId: number, userId: string) => {
 
     return deletedComment;
   } catch (error) {
-    throw new Error("Error deleting comment: " + error.message);
+    throw new Error("Error deleting comment: ");
   }
 };

@@ -21,7 +21,7 @@ const ProfileCard = async () => {
     include : {
       _count:{
         select:{
-          followers:true
+          followings:true
         }
        
       }
@@ -84,7 +84,7 @@ const handleMyProfileClick = () => {
               className="rounded-full w-3 h-3"
             />
           </div>
-          <span className="text-xs text-gray-500 ">{user._count.followers} Followers</span>
+          <span className="text-xs text-gray-500 ">{user._count.followings} Followers</span>
         </div>
         <Link href={`/profile/${user.username}`}>
         <button className="bg-blue-500 text-white text-xs p-2 rounded-md mt-1">My Profile</button>

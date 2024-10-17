@@ -5,8 +5,16 @@ import Link from "next/link";
 import { User } from "@prisma/client"; // Import the Prisma User model type
 import { useUser } from "@clerk/nextjs"; // Import the useUser hook
 
-// Define the props to include both followers and followings
-const FriendsClient = ({ followers, followings }: { followers: User[]; followings: User[] }) => {
+// Define the props to include followers, followings, and allUsers
+const FriendsClient = ({
+  followers,
+  followings,
+  allUsers,
+}: {
+  followers: User[];
+  followings: User[];
+  allUsers: User[];
+}) => {
   const { user } = useUser(); // Get the current user
   const [newFriendUsername, setNewFriendUsername] = useState("");
   const [searchError, setSearchError] = useState<string | null>(null);
@@ -17,7 +25,7 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
 
     try {
       // You can handle the search and adding friend logic via an API route or another method
-      
+
       // Redirect to the friend's profile if found
       window.location.href = `/profile/${newFriendUsername}`;
     } catch (error) {
@@ -100,6 +108,25 @@ const FriendsClient = ({ followers, followings }: { followers: User[]; following
                   className="w-8 h-8 rounded-full mr-2"
                 />
                 <span className="text-lg">{following.username}</span>
+              </div>
+            </Link>
+          </li>
+        ))}
+      </ul>
+
+      {/* All Users List */}
+      <h2 className="text-xl font-semibold mt-6 mb-6">All Users</h2>
+      <ul className="flex flex-col gap-6">
+        {allUsers.map((user) => (
+          <li key={user.id}>
+            <Link href={`/profile/${user.username}`}>
+              <div className="flex items-center cursor-pointer">
+                <img
+                  src={user.avatar || "/noAvatar.png"}
+                  alt="avatar"
+                  className="w-8 h-8 rounded-full mr-2"
+                />
+                <span className="text-lg">{user.username}</span>
               </div>
             </Link>
           </li>

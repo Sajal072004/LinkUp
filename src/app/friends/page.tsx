@@ -30,6 +30,9 @@ const FriendsPage = async () => {
     },
   });
 
+  // Fetch all users
+  const allUsers = await prisma.user.findMany();
+
   return (
     <div className="flex gap-6 pt-6">
       <div className="hidden xl:block w-[20%]">
@@ -39,12 +42,12 @@ const FriendsPage = async () => {
       <div className="w-full lg:w-[70%] xl:w-[50%]">
         <h1 className="text-2xl font-medium mb-4">Friends List</h1>
 
-        {/* Pass followers and followings as props to FriendsClient */}
+        {/* Pass followers, followings, and allUsers as props to FriendsClient */}
         <FriendsClient
           followers={followers.map((f) => f.follower)} // People who follow you
           followings={followings.map((f) => f.following)} // People you follow
+          allUsers={allUsers} // Pass all users
         />
-
       </div>
 
       <div className="hidden lg:block w-[30%]">

@@ -7,6 +7,7 @@ import Image from "next/image";
 import { auth } from "@clerk/nextjs/server";
 import UserInfoCard from "@/components/rightMenu/UserInfoCard";
 import FriendRequests from "@/components/rightMenu/FriendRequests";
+import { notFound } from "next/navigation";
 
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params.username;

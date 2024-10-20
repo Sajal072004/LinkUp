@@ -2,10 +2,8 @@ import React from "react";
 import LeftMenu from "@/components/feed/LeftMenu";
 import RightMenu from "@/components/rightMenu/RightMenu";
 import prisma from "@/lib/client";
-
 import Feed from "@/components/feed/Feed";
 import Image from "next/image";
-import { notFound } from "next/navigation";
 import { auth } from "@clerk/nextjs/server";
 import UserInfoCard from "@/components/rightMenu/UserInfoCard";
 import FriendRequests from "@/components/rightMenu/FriendRequests";
@@ -13,6 +11,7 @@ import FriendRequests from "@/components/rightMenu/FriendRequests";
 const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const username = params.username;
 
+  // Fetch profile user details
   const user = await prisma.user.findFirst({
     where: {
       username: username,
@@ -30,19 +29,33 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
 
   if (!user) return notFound();
 
+  // Get current user ID
   const { userId: currentUserId } = auth();
+  let isBlocked = false;
+  let isFriendOrFollowing = false;
 
-  let isBlocked;
   if (currentUserId) {
-    const res = await prisma.block.findFirst({
+    // Check if the current user is blocked
+    const blockRes = await prisma.block.findFirst({
       where: {
         blockerId: user.id,
         blockedId: currentUserId,
       },
     });
 
-    if (res) isBlocked = true;
-  } else isBlocked = false;
+    if (blockRes) isBlocked = true;
+
+    // Check if the current user is following the profile user
+    const followRes = await prisma.follower.findFirst({
+      where: {
+        followerId: currentUserId,
+        followingId: user.id,
+      },
+    });
+
+    // Since there's no "friend" model in your schema, we treat followers as the relationship here.
+    if (followRes) isFriendOrFollowing = true;
+  }
 
   if (isBlocked) return notFound();
 
@@ -53,11 +66,11 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
       </div>
 
       <div className="w-full lg:w-[70%] xl:w-[50%]">
-        <div className=" md:hidden lg:hidden xl:hidden mb-12">
-          <UserInfoCard user={user}/>
+        <div className="md:hidden lg:hidden xl:hidden mb-12">
+          <UserInfoCard user={user} />
         </div>
-        <div className=" md:hidden lg:hidden xl:hidden mb-12">
-          <FriendRequests/>
+        <div className="md:hidden lg:hidden xl:hidden mb-12">
+          <FriendRequests />
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col items-center justify-center">
@@ -98,9 +111,16 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
               </div>
             </div>
           </div>
-          <Feed username={user.username} />
+          {/* Render Feed only if the current user is a friend or follower */}
+          {/* Render Feed only if the current user is a friend or follower */}
+          {isFriendOrFollowing ? (
+            <Feed username={user.username} />
+          ) : (
+            <div className="text-center pb-12">Follow this user to see their posts</div>
+          )}
         </div>
       </div>
+
       <div className="hidden lg:block w-[30%]">
         <RightMenu user={user} />
       </div>

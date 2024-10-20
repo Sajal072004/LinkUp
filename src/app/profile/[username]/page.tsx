@@ -34,8 +34,12 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
   const { userId: currentUserId } = auth();
   let isBlocked = false;
   let isFriendOrFollowing = false;
+  let isCurrentUser = false;
 
   if (currentUserId) {
+    // Check if the current user is the same as the profile user
+    isCurrentUser = currentUserId === user.id;
+
     // Check if the current user is blocked
     const blockRes = await prisma.block.findFirst({
       where: {
@@ -54,8 +58,8 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
       },
     });
 
-    // Since there's no "friend" model in your schema, we treat followers as the relationship here.
-    if (followRes) isFriendOrFollowing = true;
+    // Treat followers as friends
+    if (followRes || isCurrentUser) isFriendOrFollowing = true;
   }
 
   if (isBlocked) return notFound();
@@ -112,12 +116,14 @@ const ProfilePage = async ({ params }: { params: { username: string } }) => {
               </div>
             </div>
           </div>
-          {/* Render Feed only if the current user is a friend or follower */}
-          {/* Render Feed only if the current user is a friend or follower */}
+
+          {/* Render Feed only if the current user is a friend, following, or the same user */}
           {isFriendOrFollowing ? (
             <Feed username={user.username} />
           ) : (
-            <div className="text-center pb-12">Follow this user to see their posts</div>
+            <div className="text-center pb-12">
+              Follow this user to see their posts
+            </div>
           )}
         </div>
       </div>

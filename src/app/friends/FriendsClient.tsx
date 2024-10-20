@@ -5,7 +5,7 @@ import Link from "next/link";
 import { User } from "@prisma/client"; // Import the Prisma User model type
 import { useUser } from "@clerk/nextjs"; // Import the useUser hook
 
-// Define the props to include followers, followings, and allUsers
+
 const FriendsClient = ({
   followers,
   followings,

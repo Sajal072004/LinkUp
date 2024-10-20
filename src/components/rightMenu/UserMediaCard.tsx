@@ -3,24 +3,36 @@ import Link from "next/link";
 import Image from "next/image";
 import { User } from "@prisma/client";
 import prisma from "@/lib/client";
+import { auth } from "@clerk/nextjs/server";
 
 const UserMediaCard = async ({ user }: { user: User }) => {
+  const { userId: currentUserId } = auth(); // Get current user's ID
 
+  if (!currentUserId) return null; // If not authenticated, return null
 
-  const postWithMedia = await prisma.post.findMany({
-    where:{
-      userId: user.id,
-      img: {
-        not:null,
-      },
-    },
-    take:8,
-    orderBy:{
-      createdAt:"desc"
+  // Check if the current user is following the profile user
+  const isFollowing = await prisma.follower.findFirst({
+    where: {
+      followerId: currentUserId,
+      followingId: user.id,
     },
   });
-  
 
+  if (!isFollowing) return null; // If not following, return null
+
+  // Fetch posts with media (images)
+  const postWithMedia = await prisma.post.findMany({
+    where: {
+      userId: user.id,
+      img: {
+        not: null,
+      },
+    },
+    take: 8,
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return (
     <div className="p-4 bg-white rounded-lg shadow-md text-sm flex flex-col gap-4">
@@ -33,20 +45,21 @@ const UserMediaCard = async ({ user }: { user: User }) => {
       </div>
 
       {/* bottom */}
-
       <div className="flex gap-4 justify-start flex-wrap">
-        {postWithMedia.length ? postWithMedia.map(post=>(
-
-        <div className="relative w-1/5 h-20" key={post.id}>
-          <Image
-            src={post.img!}
-            alt=""
-            fill
-            className="object-cover rounded-md"
-          />
-        </div> )) : "No media found"
-      }
-        
+        {postWithMedia.length ? (
+          postWithMedia.map((post) => (
+            <div className="relative w-1/5 h-20" key={post.id}>
+              <Image
+                src={post.img!}
+                alt=""
+                fill
+                className="object-cover rounded-md"
+              />
+            </div>
+          ))
+        ) : (
+          "No media found"
+        )}
       </div>
     </div>
   );
